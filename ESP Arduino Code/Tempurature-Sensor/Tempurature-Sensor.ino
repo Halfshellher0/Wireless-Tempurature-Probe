@@ -14,7 +14,7 @@ OneWire oneWire(ONE_WIRE_BUS);
 // Pass our oneWire reference to Dallas Temperature. 
 DallasTemperature sensors(&oneWire);
 /********************************************************************/ 
-void setup(void) 
+void setup() 
 { 
  // start serial port and sensors
  Serial.flush();
@@ -46,7 +46,7 @@ void setup(void)
  esp_sleep_enable_timer_wakeup(SleepSeconds * 1000000);
  esp_deep_sleep_start(); 
 } 
-void loop(void) 
+void loop() 
 { 
   //
 } 

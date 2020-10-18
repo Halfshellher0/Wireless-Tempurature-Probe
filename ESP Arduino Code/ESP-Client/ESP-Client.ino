@@ -7,19 +7,28 @@
  *
  */
 
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
+#include <OneWire.h> 
+#include <DallasTemperature.h>
 
-const char* ssid     = "virus.exe";
-const char* password = "RuneScape";
+#define ONE_WIRE_BUS 21 
+#define SleepSeconds 60
 
-const char* host = "192.168.0.50";
+const char* ssid     = "tplink";
+const char* password = "11758341";
+
+const uint16_t port = 8888;
+const char* host = "192.168.0.100";
+
+OneWire oneWire(ONE_WIRE_BUS); 
+DallasTemperature sensors(&oneWire);
 
 void setup() {
   Serial.begin(115200);
+  sensors.begin();
   delay(10);
 
   // We start by connecting to a WiFi network
-
   Serial.println();
   Serial.println();
   Serial.print("Connecting to ");
@@ -29,7 +38,7 @@ void setup() {
   
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
+    Serial.println("...");
   }
 
   Serial.println("");
@@ -44,19 +53,37 @@ void loop() {
   delay(5000);
   ++value;
 
+  //Get Tempurature
+  float t1, t2, t3, t4, t;
+  sensors.requestTemperatures(); // Send the command to get temperature readings 
+  t1 = sensors.getTempCByIndex(0);
+  delay(10);
+  sensors.requestTemperatures(); // Send the command to get temperature readings 
+  t2 = sensors.getTempCByIndex(0);
+  delay(10);
+  sensors.requestTemperatures(); // Send the command to get temperature readings 
+  t3 = sensors.getTempCByIndex(0);
+  delay(10);
+  sensors.requestTemperatures(); // Send the command to get temperature readings 
+  t4 = sensors.getTempCByIndex(0);
+  delay(10);
+  t = (t1 + t2 + t3 + t4) / 4;
+  Serial.print("t = ");
+  Serial.println(t,7);
+
   Serial.print("connecting to ");
   Serial.println(host);
   
   // Use WiFiClient class to create TCP connections
   WiFiClient client;
-  const int httpPort = 80;
-  if (!client.connect(host, httpPort)) {
+  if (!client.connect(host, port)) {
     Serial.println("connection failed");
+    delay(1000);
     return;
   }
-    
+  
   // This will send the request to the server
-  client.print("Hello");  
+  client.print(t,7);  
   unsigned long timeout = millis();
   while (client.available() == 0) {
     if (millis() - timeout > 5000) {

@@ -1,0 +1,13 @@
+H:\git\Wireless-Tempurature-Probe\ESP-Server\ESP-Server\bin\Debug\netcoreapp3.1\ESP-Server.exe
+H:\git\Wireless-Tempurature-Probe\ESP-Server\ESP-Server\bin\Debug\netcoreapp3.1\ESP-Server.deps.json
+H:\git\Wireless-Tempurature-Probe\ESP-Server\ESP-Server\bin\Debug\netcoreapp3.1\ESP-Server.runtimeconfig.json
+H:\git\Wireless-Tempurature-Probe\ESP-Server\ESP-Server\bin\Debug\netcoreapp3.1\ESP-Server.runtimeconfig.dev.json
+H:\git\Wireless-Tempurature-Probe\ESP-Server\ESP-Server\bin\Debug\netcoreapp3.1\ESP-Server.dll
+H:\git\Wireless-Tempurature-Probe\ESP-Server\ESP-Server\bin\Debug\netcoreapp3.1\ESP-Server.pdb
+H:\git\Wireless-Tempurature-Probe\ESP-Server\ESP-Server\obj\Debug\netcoreapp3.1\ESP-Server.csprojAssemblyReference.cache
+H:\git\Wireless-Tempurature-Probe\ESP-Server\ESP-Server\obj\Debug\netcoreapp3.1\ESP-Server.AssemblyInfoInputs.cache
+H:\git\Wireless-Tempurature-Probe\ESP-Server\ESP-Server\obj\Debug\netcoreapp3.1\ESP-Server.AssemblyInfo.cs
+H:\git\Wireless-Tempurature-Probe\ESP-Server\ESP-Server\obj\Debug\netcoreapp3.1\ESP-Server.csproj.CoreCompileInputs.cache
+H:\git\Wireless-Tempurature-Probe\ESP-Server\ESP-Server\obj\Debug\netcoreapp3.1\ESP-Server.dll
+H:\git\Wireless-Tempurature-Probe\ESP-Server\ESP-Server\obj\Debug\netcoreapp3.1\ESP-Server.pdb
+H:\git\Wireless-Tempurature-Probe\ESP-Server\ESP-Server\obj\Debug\netcoreapp3.1\ESP-Server.genruntimeconfig.cache

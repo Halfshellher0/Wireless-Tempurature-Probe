@@ -70,28 +70,28 @@ void loop() {
   Serial.println(host);
   
   // Use WiFiClient class to create TCP connections
-  WiFiClient client;
-  if (!client.connect(host, port)) {
+  WiFiClient server;
+  if (!server.connect(host, port)) {
     Serial.println("connection failed");
     delay(1000);
     return;
   }
   
   // This will send the request to the server
-  client.print(t,4);  
+  server.print(t,4);  
   unsigned long timeout = millis();
-  while (client.available() == 0) {
+  while (server.available() == 0) {
     if (millis() - timeout > 5000) {
       Serial.println(">>> Client Timeout !");
-      client.stop();
+      server.stop();
       return;
     }
   }
-  Serial.print("Sent Hello");
+  Serial.println("Sent Hello");
   
   // Read all the lines of the reply from server and print them to Serial
-  while(client.available()){
-    String line = client.readStringUntil('\r');
+  while(server.available()){
+    String line = server.readStringUntil('\r');
     Serial.print(line);
   }
   

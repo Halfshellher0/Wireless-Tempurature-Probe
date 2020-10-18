@@ -19,6 +19,7 @@ namespace ESP_Server
             while (true) // Add your exit flag here
             {
                 client = listener.AcceptTcpClient();
+                //Thread.Sleep(10);
                 ThreadPool.QueueUserWorkItem(ThreadProc, client);
             }
         }
@@ -28,16 +29,17 @@ namespace ESP_Server
         {
             //New Client Conneted
             var client = (TcpClient)clientObj;
-            Thread.Sleep(50);
 
+            
             int previousByteCount = client.Available;
             int currentByteCount;
             int endCount = 0;
 
+            
             //Wait until new bytes stop coming in before recieving message.
-            while (endCount < 5)
+            while (endCount < 15)
             {
-                Thread.Sleep(1);
+                Thread.Sleep(10);
                 currentByteCount = client.Available;
                 if (previousByteCount == currentByteCount)
                 {
@@ -46,9 +48,11 @@ namespace ESP_Server
                 else
                 {
                     previousByteCount = currentByteCount;
+                    Console.WriteLine(endCount);
                     endCount = 0;
                 }
             }
+            
 
             //Recieve Message
             currentByteCount = client.Available;

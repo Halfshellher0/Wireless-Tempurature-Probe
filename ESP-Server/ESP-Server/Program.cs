@@ -7,39 +7,67 @@ namespace ESP_Server
 {
     class Program
     {
-        static private void StartServer()
+        //Main function
+        static void Main(string[] args)
         {
-            TcpListener server = new TcpListener(System.Net.IPAddress.Any, 8888);
+            TcpListener listener = new TcpListener(System.Net.IPAddress.Any, 8888);
+            TcpClient client;
+
             //Start the server
-            server.Start();
+            listener.Start();
 
-            Console.WriteLine("Server started. Waiting for connection...");
-            //Block execution until a new client is connected.
-            TcpClient newClient = server.AcceptTcpClient();
+            while (true) // Add your exit flag here
+            {
+                client = listener.AcceptTcpClient();
+                ThreadPool.QueueUserWorkItem(ThreadProc, client);
+            }
+        }
 
-            Console.WriteLine("New client connected!");
-            Thread.Sleep(100);
+        //Process that is run on a seperate thread when a new client is communicating.
+        private static void ThreadProc(object clientObj)
+        {
+            //New Client Conneted
+            var client = (TcpClient)clientObj;
+            Thread.Sleep(50);
 
-            //Checking if new data is available to be read on the network stream
-            if (newClient.Available > 0)
+            int previousByteCount = client.Available;
+            int currentByteCount;
+            int endCount = 0;
+
+            //Wait until new bytes stop coming in before recieving message.
+            while (endCount < 5)
+            {
+                Thread.Sleep(1);
+                currentByteCount = client.Available;
+                if (previousByteCount == currentByteCount)
+                {
+                    endCount++;
+                }
+                else
+                {
+                    previousByteCount = currentByteCount;
+                    endCount = 0;
+                }
+            }
+
+            //Recieve Message
+            currentByteCount = client.Available;
+            if (currentByteCount > 0)
             {
                 //Initializing a new byte array the size of the available bytes on the network stream
-                byte[] readBytes = new byte[newClient.Available];
+                byte[] readBytes = new byte[currentByteCount];
                 //Reading data from the stream
-                 newClient.GetStream().Read(readBytes, 0, newClient.Available);
+                client.GetStream().Read(readBytes, 0, currentByteCount);
                 //Converting the byte array to string
                 String str = Encoding.ASCII.GetString(readBytes);
                 //This should output "Hello world" to the console window
                 Console.WriteLine(str);
 
-                newClient.Client.Send(Encoding.ASCII.GetBytes("Thanks!"));
+                client.Client.Send(Encoding.ASCII.GetBytes("Thanks!"));
             }
+
         }
 
-        static void Main(string[] args)
-        {
-            StartServer();
-            Console.WriteLine("Hello World!");
-        }
+
     }
 }

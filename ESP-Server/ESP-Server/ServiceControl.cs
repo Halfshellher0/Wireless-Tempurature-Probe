@@ -11,7 +11,7 @@ namespace ESP_Server
     {
         public bool Start(HostControl hostControl)
         {
-            ThreadPool.QueueUserWorkItem(startListening);
+            ThreadPool.QueueUserWorkItem(StartListener);
             return true;
 
         }
@@ -21,7 +21,7 @@ namespace ESP_Server
             return true;
         }
 
-        private static void startListening(object obj)
+        private static void StartListener(object obj)
         {
             TcpListener listener = new TcpListener(System.Net.IPAddress.Any, 8888);
             TcpClient client;
@@ -32,7 +32,6 @@ namespace ESP_Server
             while (true) // Add your exit flag here
             {
                 client = listener.AcceptTcpClient();
-                //Thread.Sleep(10);
                 ThreadPool.QueueUserWorkItem(ThreadProc, client);
             }
         }
@@ -61,7 +60,6 @@ namespace ESP_Server
                 else
                 {
                     previousByteCount = currentByteCount;
-                    Console.WriteLine(endCount);
                     endCount = 0;
                 }
             }
@@ -77,10 +75,19 @@ namespace ESP_Server
                 client.GetStream().Read(readBytes, 0, currentByteCount);
                 //Converting the byte array to string
                 String str = Encoding.ASCII.GetString(readBytes);
-                //This should output "Hello world" to the console window
-                Console.WriteLine(str);
+                //This should output "Hello world" to the console window.                
+                string[] splitter = str.Split(',');
+                if (splitter.Length > 1)
+                {
+                    string sensorId = splitter[0];
+                    double tempurature = Convert.ToDouble(splitter[1]);
+                    DBController db = new DBController();
+                    db.LogTempurature(sensorId, tempurature);
+                    Console.WriteLine(str);
+                }
+                
 
-                client.Client.Send(Encoding.ASCII.GetBytes("Thanks!"));
+                client.Client.Send(Encoding.ASCII.GetBytes("Data Recieved"));
             }
 
         }

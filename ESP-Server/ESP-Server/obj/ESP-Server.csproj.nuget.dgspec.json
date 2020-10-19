@@ -41,6 +41,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "MySql.Data": {
+              "target": "Package",
+              "version": "[8.0.21, )"
+            },
             "Topshelf": {
               "target": "Package",
               "version": "[4.2.1, )"

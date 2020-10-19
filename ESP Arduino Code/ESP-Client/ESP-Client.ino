@@ -16,6 +16,7 @@
 
 const char* ssid     = "tplink";
 const char* password = "11758341";
+const char* deviceGUID = "dd561aea-8dc3-4e51-b7e7-12b1810e8a5b";
 
 const uint16_t port = 8888;
 const char* host = "192.168.0.100";
@@ -50,21 +51,29 @@ void setup() {
 int value = 0;
 
 void loop() {
-  delay(100);
+  delay(12000);
   ++value;
 
   //Get Tempurature
   Serial.println("getting tempurature reading");
-  float t1, t2, t;
+  float t1, t2, t3, t4, t;
   sensors.requestTemperatures(); // Send the command to get temperature readings 
   t1 = sensors.getTempCByIndex(0);
- 
+  delay(10); 
   sensors.requestTemperatures(); // Send the command to get temperature readings 
   t2 = sensors.getTempCByIndex(0);
+  delay(10);
+  sensors.requestTemperatures(); // Send the command to get temperature readings 
+  t3 = sensors.getTempCByIndex(0);
+  delay(10);
+  sensors.requestTemperatures(); // Send the command to get temperature readings 
+  t4 = sensors.getTempCByIndex(0);
+
  
-  t = (t1 + t2) / 2;
-  Serial.print("t = ");
-  Serial.println(t,4);
+  t = (t1 + t2 + t3 + t4) / 4;
+  String message = deviceGUID;
+  message += ",";
+  message += String(t,4);  
 
   Serial.print("connecting to ");
   Serial.println(host);
@@ -78,7 +87,7 @@ void loop() {
   }
   
   // This will send the request to the server
-  server.print(t,4);  
+  server.print(message); 
   unsigned long timeout = millis();
   while (server.available() == 0) {
     if (millis() - timeout > 5000) {

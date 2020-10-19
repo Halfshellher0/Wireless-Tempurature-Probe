@@ -12,7 +12,8 @@
 #include <DallasTemperature.h>
 
 #define ONE_WIRE_BUS 21 
-#define SleepSeconds 60
+#define SleepMinutes 1
+#define RuntimeSeconds 4.5
 
 const char* ssid     = "tplink";
 const char* password = "11758341";
@@ -46,13 +47,6 @@ void setup() {
   Serial.println("WiFi connected");  
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-}
-
-int value = 0;
-
-void loop() {
-  delay(12000);
-  ++value;
 
   //Get Tempurature
   Serial.println("getting tempurature reading");
@@ -83,7 +77,8 @@ void loop() {
   if (!server.connect(host, port)) {
     Serial.println("connection failed");
     delay(1000);
-    return;
+    esp_sleep_enable_timer_wakeup(((SleepMinutes * 60) - RuntimeSeconds) * 1000000);
+    esp_deep_sleep_start(); 
   }
   
   // This will send the request to the server
@@ -93,7 +88,8 @@ void loop() {
     if (millis() - timeout > 5000) {
       Serial.println(">>> Client Timeout !");
       server.stop();
-      return;
+      esp_sleep_enable_timer_wakeup(((SleepMinutes * 60) - RuntimeSeconds) * 1000000);
+      esp_deep_sleep_start(); 
     }
   }
   Serial.println("Sent Hello");
@@ -106,4 +102,65 @@ void loop() {
   
   Serial.println();
   Serial.println("closing connection");
+
+  esp_sleep_enable_timer_wakeup(((SleepMinutes * 60) - RuntimeSeconds) * 1000000);
+  esp_deep_sleep_start(); 
+}
+
+
+void loop() {
+//  delay(12000);
+//
+//  //Get Tempurature
+//  Serial.println("getting tempurature reading");
+//  float t1, t2, t3, t4, t;
+//  sensors.requestTemperatures(); // Send the command to get temperature readings 
+//  t1 = sensors.getTempCByIndex(0);
+//  delay(10); 
+//  sensors.requestTemperatures(); // Send the command to get temperature readings 
+//  t2 = sensors.getTempCByIndex(0);
+//  delay(10);
+//  sensors.requestTemperatures(); // Send the command to get temperature readings 
+//  t3 = sensors.getTempCByIndex(0);
+//  delay(10);
+//  sensors.requestTemperatures(); // Send the command to get temperature readings 
+//  t4 = sensors.getTempCByIndex(0);
+//
+// 
+//  t = (t1 + t2 + t3 + t4) / 4;
+//  String message = deviceGUID;
+//  message += ",";
+//  message += String(t,4);  
+//
+//  Serial.print("connecting to ");
+//  Serial.println(host);
+//  
+//  // Use WiFiClient class to create TCP connections
+//  WiFiClient server;
+//  if (!server.connect(host, port)) {
+//    Serial.println("connection failed");
+//    delay(1000);
+//    return;
+//  }
+//  
+//  // This will send the request to the server
+//  server.print(message); 
+//  unsigned long timeout = millis();
+//  while (server.available() == 0) {
+//    if (millis() - timeout > 5000) {
+//      Serial.println(">>> Client Timeout !");
+//      server.stop();
+//      return;
+//    }
+//  }
+//  Serial.println("Sent Hello");
+//  
+//  // Read all the lines of the reply from server and print them to Serial
+//  while(server.available()){
+//    String line = server.readStringUntil('\r');
+//    Serial.print(line);
+//  }
+//  
+//  Serial.println();
+//  Serial.println("closing connection");
 }
